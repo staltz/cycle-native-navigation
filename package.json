@@ -1,0 +1,30 @@
+{
+  "name": "cycle-native-navigation",
+  "version": "1.0.0",
+  "description": "Cycle.js drivers for react-native-navigation",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "scripts": {
+    "compile": "tsc",
+    "prepublishOnly": "npm run compile"
+  },
+  "author": "staltz.com",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/react": "^15.0.38",
+    "@types/react-native": "^0.46.4",
+    "react": "16.0.0-alpha.12",
+    "react-native": "0.48.3",
+    "react-native-navigation": "1.1.x",
+    "typescript": "^2.5.2"
+  },
+  "peerDependencies": {
+    "react-native-navigation": "1.1.x",
+    "react-native": "*",
+    "react": "*"
+  },
+  "dependencies": {
+    "xstream": "10.x",
+    "@cycle/native-screen": "1.0.0-rc.4"
+  }
+}
