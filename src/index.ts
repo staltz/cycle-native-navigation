@@ -6,7 +6,17 @@ import { ScreensSource } from "./ScreensSource";
 import makeScreenComponent from "./makeScreenComponent";
 
 export { ScreensSource } from "./ScreensSource";
-export { Command } from "./types";
+export {
+  Command,
+  PushCommand,
+  DismissAllModalsCommand,
+  DismissModalCommand,
+  PopCommand,
+  PopToRootCommand,
+  ResetToCommand,
+  ShowModalCommand,
+  ScreenVNode
+} from "./types";
 
 export type NavDrivers = {
   screenVNodeDriver: (screenVNode$: Stream<ScreenVNode>) => ScreensSource;
