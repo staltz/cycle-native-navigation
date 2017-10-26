@@ -10,6 +10,13 @@
   },
   "author": "staltz.com",
   "license": "MIT",
+  "dependencies": {
+    "xstream": "10.x || 11.x",
+    "@cycle/native-screen": "1.0.0-rc.4",
+    "react-native-navigation": "1.1.x",
+    "react-native": "*",
+    "react": "*"
+  },
   "devDependencies": {
     "@types/react": "^15.0.38",
     "@types/react-native": "^0.46.4",
@@ -17,14 +24,5 @@
     "react-native": "0.48.3",
     "react-native-navigation": "1.1.x",
     "typescript": "^2.5.2"
-  },
-  "peerDependencies": {
-    "react-native-navigation": "1.1.x",
-    "react-native": "*",
-    "react": "*"
-  },
-  "dependencies": {
-    "xstream": "10.x",
-    "@cycle/native-screen": "1.0.0-rc.4"
   }
 }
