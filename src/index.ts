@@ -37,6 +37,7 @@ export function makeSingleScreenNavDrivers(
 ): NavDrivers {
   const screenVNodeMimic$ = xs.create<ScreenVNode>();
   const commandMimic$ = xs.create<Command>();
+  const navEvent$ = xs.create<any>();
   const latestVNodes = new Map<string, ReactElement<any>>();
 
   for (let i = 0, n = screenIDs.length; i < n; i++) {
@@ -47,7 +48,8 @@ export function makeSingleScreenNavDrivers(
         screenID,
         latestVNodes,
         screenVNodeMimic$,
-        commandMimic$
+        commandMimic$,
+        navEvent$
       )
     );
   }
@@ -66,6 +68,7 @@ export function makeSingleScreenNavDrivers(
 
   function commandDriver(command$: Stream<Command>) {
     command$._add(commandMimic$);
+    return navEvent$;
   }
 
   return { screenVNodeDriver, commandDriver };

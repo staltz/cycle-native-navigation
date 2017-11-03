@@ -7,7 +7,8 @@ export default function makeScreenComponent(
   screenID: string,
   latestVNodes: Map<string, ReactElement<any>>,
   vdom$: Stream<ScreenVNode>,
-  command$: Stream<Command>
+  command$: Stream<Command>,
+  navEvent$: Stream<any>
 ) {
   return () =>
     class extends Component<any, { vdom: ReactElement<any> }> {
@@ -71,6 +72,7 @@ export default function makeScreenComponent(
           case "didDisappear":
             break;
         }
+        navEvent$.shamefullySendNext(event);
       }
 
       public render() {
