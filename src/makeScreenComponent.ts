@@ -17,9 +17,11 @@ export default function makeScreenComponent(
       constructor(props: any) {
         super(props);
 
-        this.props.navigator.setOnNavigatorEvent(
-          this.onNavigatorEvent.bind(this)
-        );
+        if (this.props.navigator) {
+          this.props.navigator.setOnNavigatorEvent(
+            this.onNavigatorEvent.bind(this)
+          );
+        }
 
         this.vdomListener = {
           next: (x: ScreenVNode) => {
@@ -31,7 +33,9 @@ export default function makeScreenComponent(
 
         this.commandListener = {
           next: (command: Command) => {
-            this.props.navigator[command.type](command);
+            if (this.props.navigator) {
+              this.props.navigator[command.type](command);
+            }
           }
         };
 
