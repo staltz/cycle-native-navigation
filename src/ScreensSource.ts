@@ -1,5 +1,4 @@
 import xs, { Stream } from "xstream";
-import { ScreenVisibilityListener } from "react-native-navigation";
 import { ScreenSource } from "@cycle/native-screen";
 
 export interface ScreenVisibilityEvent {
@@ -18,7 +17,7 @@ export class ScreensSource extends ScreenSource {
 
   private _listener: any;
 
-  constructor() {
+  constructor(RNNav: any) {
     super();
 
     this._willAppear = xs.create<ScreenVisibilityEvent>();
@@ -27,7 +26,7 @@ export class ScreensSource extends ScreenSource {
     this._willDisappear = xs.create<ScreenVisibilityEvent>();
     this._didDisappear = xs.create<ScreenVisibilityEvent>();
 
-    this._listener = new ScreenVisibilityListener({
+    this._listener = new RNNav.ScreenVisibilityListener({
       willAppear: (ev: ScreenVisibilityEvent) => this._willAppear._n(ev),
       didAppear: (ev: ScreenVisibilityEvent) => this._didAppear._n(ev),
 

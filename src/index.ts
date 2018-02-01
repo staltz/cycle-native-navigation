@@ -1,4 +1,3 @@
-import { Navigation } from "react-native-navigation";
 import xs, { Stream } from "xstream";
 import { ReactElement } from "react";
 import { ScreenVNode, Command } from "./types";
@@ -25,6 +24,7 @@ export type NavDrivers = {
 
 // TODO
 function makeTabBasedNavDrivers(
+  RNNav: any,
   screenIDs: Array<string>,
   config: any
 ): NavDrivers {
@@ -32,6 +32,7 @@ function makeTabBasedNavDrivers(
 }
 
 export function makeSingleScreenNavDrivers(
+  RNNav: any,
   screenIDs: Array<string>,
   config: any
 ): NavDrivers {
@@ -42,7 +43,7 @@ export function makeSingleScreenNavDrivers(
 
   for (let i = 0, n = screenIDs.length; i < n; i++) {
     const screenID = screenIDs[i];
-    Navigation.registerComponent(
+    RNNav.Navigation.registerComponent(
       screenID,
       makeScreenComponent(
         screenID,
@@ -54,16 +55,15 @@ export function makeSingleScreenNavDrivers(
     );
   }
 
-  Navigation.startSingleScreenApp(config);
-
   function screenVNodeDriver(screenVNode$: Stream<ScreenVNode>) {
+    RNNav.Navigation.startSingleScreenApp(config);
     screenVNode$.addListener({
       next: s => {
         latestVNodes.set(s.screen, s.vdom);
       }
     });
     screenVNode$._add(screenVNodeMimic$);
-    return new ScreensSource();
+    return new ScreensSource(RNNav);
   }
 
   function commandDriver(command$: Stream<Command>) {
