@@ -37,19 +37,23 @@ export class ScreensSource extends ScreenSource {
     this._listener.register();
   }
 
-  willAppear(screen: string): Stream<ScreenVisibilityEvent> {
-    return this._willAppear.filter(ev => ev.screen === screen);
+  willAppear(screen?: string): Stream<ScreenVisibilityEvent> {
+    if (screen) return this._willAppear.filter(ev => ev.screen === screen);
+    else return this._willAppear;
   }
 
-  didAppear(screen: string): Stream<ScreenVisibilityEvent> {
-    return this._didAppear.filter(ev => ev.screen === screen);
+  didAppear(screen?: string): Stream<ScreenVisibilityEvent> {
+    if (screen) return this._didAppear.filter(ev => ev.screen === screen);
+    else return this._didAppear;
   }
 
-  willDisappear(screen: string): Stream<ScreenVisibilityEvent> {
-    return this._willDisappear.filter(ev => ev.screen === screen);
+  willDisappear(screen?: string): Stream<ScreenVisibilityEvent> {
+    if (screen) return this._willDisappear.filter(ev => ev.screen === screen);
+    else return this._willDisappear;
   }
 
-  didDisappear(screen: string): Stream<ScreenVisibilityEvent> {
-    return this._didDisappear.filter(ev => ev.screen === screen);
+  didDisappear(screen?: string): Stream<ScreenVisibilityEvent> {
+    if (screen) return this._didDisappear.filter(ev => ev.screen === screen);
+    else return this._didDisappear;
   }
 }
