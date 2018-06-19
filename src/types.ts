@@ -1,13 +1,13 @@
-import { ReactElement } from "react";
+import {ReactElement} from 'react';
 
-export type NoneAnim = "none";
-export type FadeAnim = "fade";
-export type SlideUpAnim = "slide-up";
-export type SlideDownAnim = "slide-down";
-export type SlideHorizontalAnim = "slide-horizontal";
+export type NoneAnim = 'none';
+export type FadeAnim = 'fade';
+export type SlideUpAnim = 'slide-up';
+export type SlideDownAnim = 'slide-down';
+export type SlideHorizontalAnim = 'slide-horizontal';
 
 export type PushCommand = {
-  type: "push";
+  type: 'push';
   /**
    * unique ID registered with Navigation.registerScreen
    */
@@ -63,7 +63,7 @@ export type PushCommand = {
 };
 
 export type PopCommand = {
-  type: "pop";
+  type: 'pop';
 
   /**
    * does the pop have transition animation or does it happen
@@ -79,7 +79,7 @@ export type PopCommand = {
 };
 
 export type PopToRootCommand = {
-  type: "popToRoot";
+  type: 'popToRoot';
 
   /**
    * does the pop have transition animation or does it happen
@@ -95,7 +95,7 @@ export type PopToRootCommand = {
 };
 
 export type ResetToCommand = {
-  type: "resetTo";
+  type: 'resetTo';
 
   /**
    * unique ID registered with Navigation.registerScreen
@@ -136,8 +136,27 @@ export type ResetToCommand = {
   navigatorButtons?: any;
 };
 
+export type ToggleDrawerCommand = {
+  type: 'toggleDrawer';
+
+  /**
+   * Which drawer to be toggled, the left-side drawer or the right-side one.
+   */
+  side: 'left' | 'right';
+
+  /**
+   * Does the toggle have transition animation or does it happen immediately.
+   */
+  animated?: boolean;
+
+  /**
+   * The final state desired. Optional
+   */
+  to?: 'open' | 'closed';
+};
+
 export type ShowModalCommand = {
-  type: "showModal";
+  type: 'showModal';
 
   /**
    * unique ID registered with Navigation.registerScreen
@@ -168,7 +187,7 @@ export type ShowModalCommand = {
 };
 
 export type DismissModalCommand = {
-  type: "dismissModal";
+  type: 'dismissModal';
 
   /**
    * 'none' / 'slide-down' , dismiss animation for the modal (optional,
@@ -178,7 +197,7 @@ export type DismissModalCommand = {
 };
 
 export type DismissAllModalsCommand = {
-  type: "dismissAllModals";
+  type: 'dismissAllModals';
 
   /**
    * 'none' / 'slide-down' , dismiss animation for the modal (optional,
@@ -192,6 +211,7 @@ export type Command =
   | PopCommand
   | PopToRootCommand
   | ResetToCommand
+  | ToggleDrawerCommand
   | ShowModalCommand
   | DismissModalCommand
   | DismissAllModalsCommand;
