@@ -1,5 +1,9 @@
 ## 2.1.0
 
+- Support `toggleDrawer` command
+
+## 2.1.0
+
 - Support passing no args to ScreensSource.didAppear(), ScreensSource.willAppear(), etc
 
 ## 2.0.0
