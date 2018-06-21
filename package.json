@@ -1,6 +1,6 @@
 {
   "name": "cycle-native-navigation",
-  "version": "2.2.0",
+  "version": "3.0.0-rc1",
   "description": "Cycle.js drivers for react-native-navigation",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -13,7 +13,7 @@
   "dependencies": {
     "xstream": "10.x || 11.x",
     "@cycle/native-screen": "1.0.0-rc.4",
-    "react-native-navigation": "1.1.x",
+    "react-native-navigation": "2.0.x",
     "react-native": ">= 0.49.0",
     "react": ">= 16.0.0"
   },
@@ -22,7 +22,7 @@
     "@types/react-native": "0.51.x",
     "react": "16.0.x",
     "react-native": ">= 0.49.0",
-    "react-native-navigation": "1.1.x",
+    "react-native-navigation": "2.0.x",
     "typescript": "2.5.x"
   }
 }
