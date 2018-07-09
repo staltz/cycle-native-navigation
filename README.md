@@ -1,6 +1,6 @@
 # Cycle Native Navigation
 
-Cycle.js drivers that wrap `react-native-navigation`, to handle navigation between multiple screens with native support. These drivers build on top of `@cycle/native-screen`, so you're not supposed to directly use the `@cycle/native-screen` driver if you are using this package.
+Integrate your Cycle.js app with `react-native-navigation`, to handle navigation between multiple screens with native support. This library replaces `@cycle/run` and is not a driver, but provides some built-in drivers.
 
 ```
 npm install cycle-native-navigation
@@ -11,24 +11,25 @@ Note: `react-native-navigation`, `react-native`, `react` are expected peer depen
 **Usage:**
 
 ```js
-import {run} from '@cycle/run';
-import {makeSingleScreenNavDrivers} from 'cycle-native-navigation';
+import {run} from 'cycle-native-navigation';
 
-function main(sources) {
-  // ... your application ...
-}
+const screens = {
+  MainScreen: function main(sources) { /* Your Cycle.js component here... */ },
+  ListScreen: function list(sources) { /* ... */ },
+  HelpScreen: function help(sources) { /* ... */ },
+};
 
-const {screenVNodeDriver, commandDriver} = makeSingleScreenNavDrivers(
-  ['myapp.MainScreen', 'myapp.WelcomeScreen'],
-  {
-    screen: {
-      screen: 'myapp.WelcomeScreen',
-    },
-  }
-);
+const drivers = {
+  // Typical Cycle.js drivers object that is given to run()
+};
 
-run(main, {
-  screen: screenVNodeDriver,
-  navCommand: commandDriver
-});
+const layout = {
+  // The initial app layout, see react-native-navigation docs about this
+};
+
+const defaultNavOptions = {
+  // Navigation options for every screen, see react-native-navigation docs
+};
+
+run(screens, drivers, layout, defaultNavOptions);
 ```
