@@ -3,8 +3,7 @@ import {Component, PureComponent, ReactElement, createElement} from 'react';
 import {BackHandler} from 'react-native';
 import {Navigation} from 'react-native-navigation';
 import {Engine, Sources, Sinks} from '@cycle/run';
-import {ScreenSource} from '@cycle/native-screen';
-import {HandlersContext} from '@cycle/native-screen/lib/cjs/context';
+import {ScreenSource, ContextData, HandlersContext} from '@cycle/native-screen';
 import {Command} from './types';
 import {NavSource} from './NavSource';
 
@@ -79,7 +78,7 @@ export default function makeComponent<So extends Sources, Si extends Sinks>(
       private screenSource?: ScreenSource;
       private navSource?: NavSource;
       private backHandler: () => void;
-      private evHandlers: object;
+      private ctx: ContextData;
       private screenSink: Stream<ReactElement<any>>;
       private latestOpts: any;
 
@@ -87,15 +86,14 @@ export default function makeComponent<So extends Sources, Si extends Sinks>(
         super(props);
         this.state = {reactElem: null};
         this.backHandler = this.onBackPressed.bind(this);
-        this.evHandlers = {};
+        this.ctx = new ContextData();
         this.screenSink = xs.never();
         this.latestOpts = {};
       }
 
       public componentWillMount() {
         const thisId = this.props.componentId;
-        const screensSource = (this.screenSource = new ScreenSource(this
-          .evHandlers as any));
+        const screensSource = (this.screenSource = new ScreenSource(this.ctx));
         const navSource = (this.navSource = new NavSource());
         const sources: So & MoreSources = {
           ...(engine.sources as object),
@@ -151,7 +149,7 @@ export default function makeComponent<So extends Sources, Si extends Sinks>(
       public render() {
         return createElement(
           HandlersContext.Provider,
-          {value: this.evHandlers},
+          {value: this.ctx},
           createElement(ViewStream, {stream: this.screenSink}),
         );
       }
@@ -180,6 +178,7 @@ export default function makeComponent<So extends Sources, Si extends Sinks>(
         BackHandler.removeEventListener('hardwareBackPress', this.backHandler);
         this.disposeRun = undefined;
         this.latestOpts = undefined;
+        this.ctx = null as any;
       }
     }
     return NavComponent;
