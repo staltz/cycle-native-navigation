@@ -12,17 +12,17 @@
   "license": "MIT",
   "dependencies": {
     "xstream": "10.x || 11.x",
-    "@cycle/native-screen": "1.0.0-rc.8",
+    "@cycle/react": "1.1.x",
     "@cycle/run": "4.4.x",
     "react-native-navigation": "2.0.x",
-    "react-native": ">= 0.49.0",
+    "react-native": ">= 0.55.0",
     "react": ">= 16.4.0"
   },
   "devDependencies": {
     "@types/react": "^16.4.0",
     "@types/react-native": "0.55.x",
     "react": "16.4.x",
-    "react-native": ">= 0.49.0",
+    "react-native": ">= 0.55.0",
     "react-native-navigation": "2.0.x",
     "typescript": "2.8.x"
   }

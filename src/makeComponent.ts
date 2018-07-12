@@ -1,9 +1,9 @@
 import xs, {Stream, Subscription} from 'xstream';
-import {Component, PureComponent, ReactElement, createElement} from 'react';
+import {Component, ReactElement, createElement} from 'react';
 import {BackHandler} from 'react-native';
 import {Navigation} from 'react-native-navigation';
 import {Engine, Sources, Sinks} from '@cycle/run';
-import {ScreenSource, ContextData, HandlersContext} from '@cycle/native-screen';
+import {ScopeContext, ReactSource, StreamRenderer} from '@cycle/react';
 import {Command} from './types';
 import {NavSource} from './NavSource';
 
@@ -12,13 +12,13 @@ export type Props = {
 };
 
 export type State = {
-  reactElem: ReactElement<any> | null;
+  source: ReactSource | null;
+  sink: Stream<ReactElement<any>> | null;
 };
 
 export type MoreSources = {
-  screen: ScreenSource;
+  screen: ReactSource;
   navigation: NavSource;
-  props: Stream<Props>;
 };
 
 export type MoreSinks = {
@@ -26,40 +26,6 @@ export type MoreSinks = {
   screen?: Stream<ReactElement<any>>;
   navOptions?: Stream<any>;
 };
-
-type ViewStreamProps = {
-  stream: Stream<ReactElement<any>>;
-};
-
-type ViewStreamState = {
-  reactElem: ReactElement<any> | null;
-};
-
-class ViewStream extends PureComponent<ViewStreamProps, ViewStreamState> {
-  private reactElemSub?: Subscription;
-
-  constructor(props: ViewStreamProps) {
-    super(props);
-    this.state = {reactElem: null};
-  }
-
-  public componentWillMount() {
-    this.reactElemSub = this.props.stream.subscribe({
-      next: (elem: ReactElement<any>) => {
-        this.setState(() => ({reactElem: elem}));
-      },
-    });
-  }
-
-  public render() {
-    return this.state.reactElem;
-  }
-
-  public componentWillUnmount() {
-    if (this.reactElemSub) this.reactElemSub.unsubscribe();
-    this.reactElemSub = undefined;
-  }
-}
 
 function neverComplete(stream: Stream<any>): Stream<any> {
   return xs.merge(stream, xs.never());
@@ -72,32 +38,31 @@ export default function makeComponent<So extends Sources, Si extends Sinks>(
 ): any {
   return () => {
     class NavComponent extends Component<Props, State> {
+      private latestProps: Props;
       private disposeRun?: () => void;
       private commandSub?: Subscription;
       private navOptionsSub?: Subscription;
-      private screenSource?: ScreenSource;
       private navSource?: NavSource;
       private backHandler: () => void;
-      private ctx: ContextData;
-      private screenSink: Stream<ReactElement<any>>;
       private latestOpts: any;
 
       constructor(props: any) {
         super(props);
-        this.state = {reactElem: null};
+        this.state = {source: null, sink: null};
+        this.latestProps = props;
         this.backHandler = this.onBackPressed.bind(this);
-        this.ctx = new ContextData();
-        this.screenSink = xs.never();
         this.latestOpts = {};
       }
 
       public componentWillMount() {
         const thisId = this.props.componentId;
-        const screensSource = (this.screenSource = new ScreenSource(this.ctx));
+        const source = new ReactSource();
+        source._props$._n(this.props);
+        this.latestProps = this.props;
         const navSource = (this.navSource = new NavSource());
         const sources: So & MoreSources = {
           ...(engine.sources as object),
-          screen: screensSource,
+          screen: source,
           navigation: navSource,
           props: xs
             .of(this.props)
@@ -106,7 +71,7 @@ export default function makeComponent<So extends Sources, Si extends Sinks>(
         } as any;
         const sinks = main(sources);
         this.disposeRun = engine.run(sinks);
-        this.screenSink = sinks.screen || this.screenSink;
+        const sink = sinks.screen || this.state.sink;
 
         if (sinks.navigation) {
           this.commandSub = sinks.navigation.subscribe({
@@ -139,6 +104,7 @@ export default function makeComponent<So extends Sources, Si extends Sinks>(
         }
 
         BackHandler.addEventListener('hardwareBackPress', this.backHandler);
+        this.setState({source, sink});
       }
 
       public componentDidAppear() {
@@ -147,11 +113,20 @@ export default function makeComponent<So extends Sources, Si extends Sinks>(
       }
 
       public render() {
+        const {source, sink} = this.state;
+        if (!source || !sink) return null;
         return createElement(
-          HandlersContext.Provider,
-          {value: this.ctx},
-          createElement(ViewStream, {stream: this.screenSink}),
+          ScopeContext.Provider,
+          {value: source._scope},
+          createElement(StreamRenderer, {stream: sink}),
         );
+      }
+
+      public componentDidUpdate(props: Props) {
+        if (!this.state.source) return;
+        if (props === this.latestProps) return;
+        this.state.source._props$._n(props);
+        this.latestProps = props;
       }
 
       public onBackPressed() {
@@ -178,7 +153,6 @@ export default function makeComponent<So extends Sources, Si extends Sinks>(
         BackHandler.removeEventListener('hardwareBackPress', this.backHandler);
         this.disposeRun = undefined;
         this.latestOpts = undefined;
-        this.ctx = null as any;
       }
     }
     return NavComponent;
