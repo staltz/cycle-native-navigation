@@ -27,6 +27,10 @@ export type MoreSinks = {
   navOptions?: Stream<any>;
 };
 
+type NavSubscription = {
+  remove(): void;
+};
+
 function neverComplete(stream: Stream<any>): Stream<any> {
   return xs.merge(stream, xs.never());
 }
@@ -38,27 +42,26 @@ export default function makeComponent<So extends Sources, Si extends Sinks>(
 ): any {
   return () => {
     class NavComponent extends Component<Props, State> {
-      private latestProps: Props;
       private disposeRun?: () => void;
       private commandSub?: Subscription;
       private navOptionsSub?: Subscription;
       private navSource?: NavSource;
+      private navEventsSub: NavSubscription;
       private backHandler: () => void;
       private latestOpts: any;
 
       constructor(props: any) {
         super(props);
         this.state = {source: null, sink: null};
-        this.latestProps = props;
         this.backHandler = this.onBackPressed.bind(this);
         this.latestOpts = {};
+        this.navEventsSub = Navigation.events().bindComponent(this);
       }
 
-      public componentWillMount() {
+      public componentDidMount() {
         const thisId = this.props.componentId;
         const source = new ReactSource();
         source._props$._n(this.props);
-        this.latestProps = this.props;
         const navSource = (this.navSource = new NavSource());
         const sources: So & MoreSources = {
           ...(engine.sources as object),
@@ -122,11 +125,10 @@ export default function makeComponent<So extends Sources, Si extends Sinks>(
         );
       }
 
-      public componentDidUpdate(props: Props) {
+      public componentDidUpdate(prevProps: Props) {
         if (!this.state.source) return;
-        if (props === this.latestProps) return;
-        this.state.source._props$._n(props);
-        this.latestProps = props;
+        if (this.props === prevProps) return;
+        this.state.source._props$._n(this.props);
       }
 
       public onBackPressed() {
@@ -136,7 +138,7 @@ export default function makeComponent<So extends Sources, Si extends Sinks>(
         return true;
       }
 
-      public onNavigationButtonPressed(buttonId: string) {
+      public navigationButtonPressed({buttonId}: {buttonId: string}) {
         if (!this.navSource) return;
         this.navSource._topBar._n(buttonId);
       }
@@ -150,6 +152,7 @@ export default function makeComponent<So extends Sources, Si extends Sinks>(
         if (this.disposeRun) this.disposeRun();
         if (this.commandSub) this.commandSub.unsubscribe();
         if (this.navOptionsSub) this.navOptionsSub.unsubscribe();
+        this.navEventsSub.remove();
         BackHandler.removeEventListener('hardwareBackPress', this.backHandler);
         this.disposeRun = undefined;
         this.latestOpts = undefined;
