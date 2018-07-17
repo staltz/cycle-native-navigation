@@ -12,7 +12,7 @@
   "license": "MIT",
   "dependencies": {
     "xstream": "10.x || 11.x",
-    "@cycle/react": "1.1.x",
+    "@cycle/react": "1.3.x",
     "@cycle/run": "4.4.x",
     "react-native-navigation": "2.0.x",
     "react-native": ">= 0.55.0",
