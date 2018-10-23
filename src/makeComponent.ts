@@ -2,7 +2,7 @@ import xs, {Stream, Subscription} from 'xstream';
 import {Component, ReactElement, createElement} from 'react';
 import {BackHandler} from 'react-native';
 import {Navigation} from 'react-native-navigation';
-import {Engine, Sources, Sinks} from '@cycle/run';
+import {Engine, MatchingMain, Drivers, Sources, Sinks} from '@cycle/run';
 import {ScopeContext, ReactSource, StreamRenderer} from '@cycle/react';
 import {Command} from './types';
 import {NavSource} from './NavSource';
@@ -35,9 +35,12 @@ function neverComplete(stream: Stream<any>): Stream<any> {
   return xs.merge(stream, xs.never());
 }
 
-export default function makeComponent<So extends Sources, Si extends Sinks>(
-  main: (so: So & MoreSources) => Si & MoreSinks,
-  engine: Engine<So, Si>,
+export default function makeComponent<
+  D extends Drivers,
+  M extends MatchingMain<D, M>
+>(
+  main: MatchingMain<D, M>, // (so: So & MoreSources) => Si & MoreSinks,
+  engine: Engine<D>,
   screenId: string,
 ): any {
   return () => {
@@ -63,7 +66,7 @@ export default function makeComponent<So extends Sources, Si extends Sinks>(
         const source = new ReactSource();
         source._props$._n(this.props);
         const navSource = (this.navSource = new NavSource());
-        const sources: So & MoreSources = {
+        const sources: Sources<D> & MoreSources = {
           ...(engine.sources as object),
           screen: source,
           navigation: navSource,

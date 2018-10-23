@@ -3,9 +3,9 @@ import {Screens} from './types';
 import makeComponent from './makeComponent';
 import {setupReusable, Drivers} from '@cycle/run';
 
-export function run(
+export function run<D extends Drivers>(
   screens: Screens,
-  drivers: Drivers<any, any>,
+  drivers: D,
   layout: any,
   defaultOpts?: any,
 ): void {
