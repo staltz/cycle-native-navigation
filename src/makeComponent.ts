@@ -1,8 +1,8 @@
 import xs, {Stream, Subscription} from 'xstream';
-import {Component, ReactElement, createElement} from 'react';
+import {Component, ComponentClass, ReactElement, createElement} from 'react';
 import {BackHandler} from 'react-native';
 import {Navigation} from 'react-native-navigation';
-import {Engine, MatchingMain, Drivers, Sources, Sinks} from '@cycle/run';
+import {Engine, MatchingMain, Drivers, Sources} from '@cycle/run';
 import {ScopeContext, ReactSource, StreamRenderer} from '@cycle/react';
 import {Command} from './types';
 import {NavSource} from './NavSource';
@@ -42,7 +42,7 @@ export default function makeComponent<
   main: MatchingMain<D, M>, // (so: So & MoreSources) => Si & MoreSinks,
   engine: Engine<D>,
   screenId: string,
-): any {
+): () => ComponentClass<Props> {
   return () => {
     class NavComponent extends Component<Props, State> {
       private disposeRun?: () => void;
