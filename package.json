@@ -1,6 +1,6 @@
 {
   "name": "cycle-native-navigation",
-  "version": "5.1.0",
+  "version": "5.2.0",
   "description": "Cycle.js drivers for react-native-navigation",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
