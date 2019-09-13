@@ -8,6 +8,9 @@ npm install cycle-native-navigation
 
 Note: `react-native-navigation`, `react-native`, `react` are expected peer dependencies.
 
+- If using React Native 0.60 or higher, choose this library's version 6.0.0+
+- If using React Native 0.59 or lower, choose 5.2.0 or lower
+
 **Usage:**
 
 ```js
