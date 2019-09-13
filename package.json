@@ -11,19 +11,19 @@
   "author": "staltz.com",
   "license": "MIT",
   "dependencies": {
-    "xstream": "10.x || 11.x",
-    "@cycle/react": "2.0.x",
-    "@cycle/run": "5.1.x",
-    "react-native-navigation": "2.1.x",
-    "react-native": ">= 0.55.0",
-    "react": ">= 16.4.0"
+    "xstream": "11.x",
+    "@cycle/react": "2.x",
+    "@cycle/run": "5.x",
+    "react-native-navigation": "3.2.x",
+    "react-native": ">=0.60.0",
+    "react": ">=16.8.0"
   },
   "devDependencies": {
     "@types/react": "^16.4.0",
     "@types/react-native": "0.55.x",
-    "react": "16.4.x",
-    "react-native": ">= 0.55.0",
-    "react-native-navigation": "2.1.x",
-    "typescript": "3.1.x"
+    "react": "16.8.x",
+    "react-native": ">=0.60.0",
+    "react-native-navigation": "3.2.x",
+    "typescript": "3.6.x"
   }
 }
