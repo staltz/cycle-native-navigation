@@ -11,14 +11,14 @@
   "author": "staltz.com",
   "license": "MIT",
   "dependencies": {
-    "xstream": "11.x",
     "@cycle/react": "2.x",
-    "@cycle/run": "5.x"
+    "@cycle/run": "5.x",
+    "xstream": "11.x"
   },
   "peerDependencies": {
-    "react-native-navigation": "3.2.x",
+    "react": ">=16.8.0",
     "react-native": ">=0.60.0",
-    "react": ">=16.8.0"
+    "react-native-navigation": "3.2.x"
   },
   "devDependencies": {
     "@types/react": "^16.4.0",
