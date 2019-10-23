@@ -87,6 +87,9 @@ export default function makeComponent<
               if (cmd.type === 'pop') Navigation.pop(id, cmd.options);
               if (cmd.type === 'popTo') Navigation.popTo(id);
               if (cmd.type === 'popToRoot') Navigation.popToRoot(id);
+              if (cmd.type === 'setStackRoot') {
+                Navigation.setStackRoot(id, cmd.layout);
+              }
               if (cmd.type === 'showOverlay') {
                 Navigation.showOverlay(cmd.layout);
               }

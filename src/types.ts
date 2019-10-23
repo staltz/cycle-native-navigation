@@ -1,13 +1,15 @@
+import {Layout, Options} from 'react-native-navigation';
+
 export type PushCommand = {
   type: 'push';
   id?: string;
-  layout: any;
+  layout: Layout;
 };
 
 export type PopCommand = {
   type: 'pop';
   id?: string;
-  options: any;
+  options: Options;
 };
 
 export type PopToCommand = {
@@ -20,10 +22,16 @@ export type PopToRootCommand = {
   id?: string;
 };
 
+export type SetStackRootCommand = {
+  type: 'setStackRoot';
+  id?: string;
+  layout: Layout;
+};
+
 export type ShowOverlayCommand = {
   type: 'showOverlay';
   id?: string;
-  layout: any;
+  layout: Layout;
 };
 
 export type DismissOverlayCommand = {
@@ -34,7 +42,7 @@ export type DismissOverlayCommand = {
 export type MergeOptionsCommand = {
   type: 'mergeOptions';
   id?: string;
-  opts: any;
+  opts: Options;
 };
 
 export type Command =
@@ -42,6 +50,7 @@ export type Command =
   | PopCommand
   | PopToCommand
   | PopToRootCommand
+  | SetStackRootCommand
   | ShowOverlayCommand
   | DismissOverlayCommand
   | MergeOptionsCommand;
