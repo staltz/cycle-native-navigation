@@ -77,12 +77,12 @@ export default function makeComponent<
         } as any;
         const sinks = main(sources);
         this.disposeRun = engine.run(sinks);
-        const sink = sinks.screen || this.state.sink;
+        const sink = sinks.screen ?? this.state.sink;
 
         if (sinks.navigation) {
           this.commandSub = sinks.navigation.subscribe({
             next: (cmd: Command) => {
-              const id = cmd.id || thisId;
+              const id = cmd.id ?? thisId;
               if (cmd.type === 'push') Navigation.push(id, cmd.layout);
               if (cmd.type === 'pop') Navigation.pop(id, cmd.options);
               if (cmd.type === 'popTo') Navigation.popTo(id);
