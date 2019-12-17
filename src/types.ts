@@ -39,6 +39,22 @@ export type DismissOverlayCommand = {
   id?: string;
 };
 
+export type ShowModalCommand = {
+  type: 'showModal';
+  id?: string;
+  layout: Layout;
+};
+
+export type DismissModalCommand = {
+  type: 'dismissModal';
+  id?: string;
+};
+
+export type DismissAllModalsCommand = {
+  type: 'dismissAllModals';
+  id?: string;
+};
+
 export type MergeOptionsCommand = {
   type: 'mergeOptions';
   id?: string;
@@ -53,6 +69,9 @@ export type Command =
   | SetStackRootCommand
   | ShowOverlayCommand
   | DismissOverlayCommand
+  | ShowModalCommand
+  | DismissModalCommand
+  | DismissAllModalsCommand
   | MergeOptionsCommand;
 
 export type Screens = {
