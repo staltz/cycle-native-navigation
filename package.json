@@ -4,6 +4,7 @@
   "description": "Cycle.js drivers for react-native-navigation",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
+  "homepage": "https://github.com/staltz/cycle-native-navigation",
   "scripts": {
     "compile": "tsc",
     "prepublishOnly": "npm run compile"
