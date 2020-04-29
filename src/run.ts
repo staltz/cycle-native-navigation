@@ -1,7 +1,8 @@
 import {Navigation, Layout, Options} from 'react-native-navigation';
+import {setupReusable, Drivers} from '@cycle/run';
 import {Screens} from './types';
 import makeComponent from './makeComponent';
-import {setupReusable, Drivers} from '@cycle/run';
+import {runGlobal, GlobalScreen} from './global'
 
 export function run<D extends Drivers>(
   screens: Screens,
@@ -16,5 +17,8 @@ export function run<D extends Drivers>(
   Navigation.events().registerAppLaunchedListener(() => {
     if (defaultOpts) Navigation.setDefaultOptions(defaultOpts);
     Navigation.setRoot({root: layout});
+    if (screens[GlobalScreen]) {
+      runGlobal(screens[GlobalScreen], engine);
+    }
   });
 }

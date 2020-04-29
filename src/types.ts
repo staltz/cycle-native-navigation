@@ -1,4 +1,5 @@
 import {Layout, Options} from 'react-native-navigation';
+import {GlobalScreen} from './global';
 
 export type PushCommand = {
   type: 'push';
@@ -76,4 +77,5 @@ export type Command =
 
 export type Screens = {
   [screenId: string]: (so: any) => any;
+  [GlobalScreen]: (so: any) => any;
 };
