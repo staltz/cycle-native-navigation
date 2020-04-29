@@ -4,7 +4,7 @@ import {BackHandler} from 'react-native';
 import {Navigation} from 'react-native-navigation';
 import {Engine, MatchingMain, Drivers, Sources} from '@cycle/run';
 import {ScopeContext, ReactSource, StreamRenderer} from '@cycle/react';
-import {Command} from './types';
+import {Command, MoreScreenSources, MoreScreenSinks} from './types';
 import {NavSource} from './NavSource';
 
 export type Props = {
@@ -14,17 +14,6 @@ export type Props = {
 export type State = {
   source: ReactSource | null;
   sink: Stream<ReactElement<any>> | null;
-};
-
-export type MoreSources = {
-  screen: ReactSource;
-  navigation: NavSource;
-};
-
-export type MoreSinks = {
-  navigation?: Stream<Command>;
-  screen?: Stream<ReactElement<any>>;
-  navOptions?: Stream<any>;
 };
 
 type NavSubscription = {
@@ -66,7 +55,7 @@ export default function makeComponent<
         const source = new ReactSource();
         source._props$._n(this.props);
         const navSource = (this.navSource = new NavSource());
-        const sources: Sources<D> & MoreSources = {
+        const sources: Sources<D> & MoreScreenSources = {
           ...(engine.sources as object),
           screen: source,
           navigation: navSource,
@@ -75,7 +64,7 @@ export default function makeComponent<
             .compose(neverComplete)
             .remember(),
         } as any;
-        const sinks = main(sources);
+        const sinks: MoreScreenSinks = main(sources);
         this.disposeRun = engine.run(sinks);
         const sink = sinks.screen ?? this.state.sink;
 
