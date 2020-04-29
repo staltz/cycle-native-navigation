@@ -1,7 +1,7 @@
+import {Navigation} from 'react-native-navigation';
 import {Drivers, Engine, Sources} from '@cycle/run';
 import {NavSource} from './NavSource';
-
-export const GlobalScreen = Symbol('global component without a screen');
+import {Command} from './types';
 
 export function runGlobal<D extends Drivers>(
   main: (so: any) => any,
@@ -13,4 +13,38 @@ export function runGlobal<D extends Drivers>(
   } as any;
   const sinks = main(sources);
   engine.run(sinks);
+  if (sinks.navigation) {
+    sinks.navigation.subscribe({
+      next: (cmd: Command) => {
+        const id = cmd.id;
+        if (!id) {
+          console.error(
+            'The global screen component cannot apply a ' +
+              'navigation command if an "id" is not provided',
+          );
+          return;
+        }
+
+        if (cmd.type === 'push') Navigation.push(id, cmd.layout);
+        if (cmd.type === 'pop') Navigation.pop(id, cmd.options);
+        if (cmd.type === 'popTo') Navigation.popTo(id);
+        if (cmd.type === 'popToRoot') Navigation.popToRoot(id);
+        if (cmd.type === 'showModal') Navigation.showModal(cmd.layout);
+        if (cmd.type === 'dismissModal') Navigation.dismissModal(id);
+        if (cmd.type === 'dismissAllModals') Navigation.dismissAllModals();
+        if (cmd.type === 'setStackRoot') {
+          Navigation.setStackRoot(id, cmd.layout);
+        }
+        if (cmd.type === 'showOverlay') {
+          Navigation.showOverlay(cmd.layout);
+        }
+        if (cmd.type === 'dismissOverlay') {
+          Navigation.dismissOverlay(id);
+        }
+        if (cmd.type === 'mergeOptions') {
+          Navigation.mergeOptions(id, cmd.opts);
+        }
+      },
+    });
+  }
 }

@@ -2,7 +2,8 @@ import {Navigation, Layout, Options} from 'react-native-navigation';
 import {setupReusable, Drivers} from '@cycle/run';
 import {Screens} from './types';
 import makeComponent from './makeComponent';
-import {runGlobal, GlobalScreen} from './global'
+import {runGlobal} from './global';
+import {GlobalScreen} from './symbols';
 
 export function run<D extends Drivers>(
   screens: Screens,
@@ -18,7 +19,7 @@ export function run<D extends Drivers>(
     if (defaultOpts) Navigation.setDefaultOptions(defaultOpts);
     Navigation.setRoot({root: layout});
     if (screens[GlobalScreen]) {
-      runGlobal(screens[GlobalScreen], engine);
+      runGlobal(screens[GlobalScreen]!, engine);
     }
   });
 }

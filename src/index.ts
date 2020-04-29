@@ -8,6 +8,6 @@ export {
   MergeOptionsCommand,
   ShowOverlayCommand,
 } from './types';
-export {GlobalScreen} from './global';
+export {GlobalScreen} from './symbols';
 export {NavSource} from './NavSource';
 export {run} from './run';
