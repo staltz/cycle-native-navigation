@@ -13,10 +13,15 @@ export function runGlobal<D extends Drivers>(
   } as any;
   const sinks = main(sources);
   engine.run(sinks);
+
   if (sinks.navigation) {
+    let latestId: string | undefined;
+    Navigation.events().registerComponentDidAppearListener(({componentId}) => {
+      latestId = componentId;
+    });
     sinks.navigation.subscribe({
       next: (cmd: Command) => {
-        const id = cmd.id;
+        const id = cmd.id ?? latestId;
         if (!id) {
           console.error(
             'The global screen component cannot apply a ' +
