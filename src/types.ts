@@ -1,7 +1,7 @@
 import {Stream} from 'xstream';
 import {ReactElement} from 'react';
 import {ReactSource} from '@cycle/react';
-import {Layout, Options} from 'react-native-navigation';
+import {Layout, Options, LayoutRoot} from 'react-native-navigation';
 import {GlobalScreen} from './symbols';
 import {NavSource} from './NavSource';
 
@@ -50,6 +50,11 @@ export type ShowModalCommand = {
   layout: Layout;
 };
 
+export type SetRootCommand = {
+  type: "setRoot";
+  layout: LayoutRoot;
+};
+
 export type DismissModalCommand = {
   type: 'dismissModal';
   id?: string;
@@ -71,6 +76,7 @@ export type Command =
   | PopCommand
   | PopToCommand
   | PopToRootCommand
+  | SetRootCommand
   | SetStackRootCommand
   | ShowOverlayCommand
   | DismissOverlayCommand

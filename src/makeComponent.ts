@@ -83,6 +83,9 @@ export default function makeComponent<
               if (cmd.type === 'setStackRoot') {
                 Navigation.setStackRoot(id, cmd.layout);
               }
+              if (cmd.type === 'setRoot') {
+                Navigation.setRoot(cmd.layout);
+              }
               if (cmd.type === 'showOverlay') {
                 Navigation.showOverlay(cmd.layout);
               }
