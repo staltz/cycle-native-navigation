@@ -71,6 +71,10 @@ export default function makeComponent<
         if (sinks.navigation) {
           this.commandSub = sinks.navigation.subscribe({
             next: (cmd: Command) => {
+              if (cmd.type === 'setRoot') {
+                Navigation.setRoot(cmd.layout);
+                return
+              }
               const id = cmd.id ?? thisId;
               if (cmd.type === 'push') Navigation.push(id, cmd.layout);
               if (cmd.type === 'pop') Navigation.pop(id, cmd.options);
@@ -82,9 +86,6 @@ export default function makeComponent<
                 Navigation.dismissAllModals();
               if (cmd.type === 'setStackRoot') {
                 Navigation.setStackRoot(id, cmd.layout);
-              }
-              if (cmd.type === 'setRoot') {
-                Navigation.setRoot(cmd.layout);
               }
               if (cmd.type === 'showOverlay') {
                 Navigation.showOverlay(cmd.layout);

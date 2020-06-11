@@ -21,6 +21,10 @@ export function runGlobal<D extends Drivers>(
     });
     sinks.navigation.subscribe({
       next: (cmd: Command) => {
+        if (cmd.type === 'setRoot') {
+          Navigation.setRoot(cmd.layout);
+          return
+        }
         const id = cmd.id ?? latestId;
         if (!id) {
           console.error(
@@ -29,7 +33,6 @@ export function runGlobal<D extends Drivers>(
           );
           return;
         }
-
         if (cmd.type === 'push') Navigation.push(id, cmd.layout);
         if (cmd.type === 'pop') Navigation.pop(id, cmd.options);
         if (cmd.type === 'popTo') Navigation.popTo(id);
