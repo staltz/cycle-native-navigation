@@ -41,7 +41,7 @@ export class NavSource {
   }
 
   public didDisappear() {
-    return this._didAppear;
+    return this._didDisappear;
   }
 
   public globalDidDisappear(componentName?: string): Stream<DisappearEvent> {
