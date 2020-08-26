@@ -5,7 +5,11 @@ import {
   ComponentDidDisappearEvent,
 } from 'react-native-navigation';
 
-export type DisappearEvent = {componentId: string; componentName: string};
+type HasListenerHandle = {
+  handle?: {
+    remove?(): void;
+  };
+};
 
 export class NavSource {
   public _topBar: Stream<string>;
@@ -22,20 +26,28 @@ export class NavSource {
     this._didDisappear = xs.create<null>();
     this._globalDidAppear = xs.create<ComponentDidAppearEvent>({
       start(listener: Listener<ComponentDidAppearEvent>) {
-        Navigation.events().registerComponentDidAppearListener((event) => {
-          listener.next(event);
-        });
+        this.handle = Navigation.events().registerComponentDidAppearListener(
+          (event) => {
+            listener.next(event);
+          },
+        );
       },
-      stop() {},
-    });
+      stop() {
+        this.handle?.remove?.();
+      },
+    } as Producer<ComponentDidAppearEvent> & HasListenerHandle);
     this._globalDidDisappear = xs.create<ComponentDidDisappearEvent>({
       start(listener: Listener<ComponentDidDisappearEvent>) {
-        Navigation.events().registerComponentDidDisappearListener((event) => {
-          listener.next(event);
-        });
+        this.handle = Navigation.events().registerComponentDidDisappearListener(
+          (event) => {
+            listener.next(event);
+          },
+        );
       },
-      stop() {},
-    });
+      stop() {
+        this.handle?.remove?.();
+      },
+    } as Producer<ComponentDidDisappearEvent> & HasListenerHandle);
   }
 
   public topBarButtonPress(buttonId?: string) {
