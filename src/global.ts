@@ -23,7 +23,7 @@ export function runGlobal<D extends Drivers>(
       next: (cmd: Command) => {
         if (cmd.type === 'setRoot') {
           Navigation.setRoot(cmd.layout);
-          return
+          return;
         }
         const id = cmd.id ?? latestId;
         if (!id) {

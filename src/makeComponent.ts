@@ -59,10 +59,7 @@ export default function makeComponent<
           ...(engine.sources as object),
           screen: source,
           navigation: navSource,
-          props: xs
-            .of(this.props)
-            .compose(neverComplete)
-            .remember(),
+          props: xs.of(this.props).compose(neverComplete).remember(),
         } as any;
         const sinks: MoreScreenSinks = main(sources);
         this.disposeRun = engine.run(sinks);
@@ -73,7 +70,7 @@ export default function makeComponent<
             next: (cmd: Command) => {
               if (cmd.type === 'setRoot') {
                 Navigation.setRoot(cmd.layout);
-                return
+                return;
               }
               const id = cmd.id ?? thisId;
               if (cmd.type === 'push') Navigation.push(id, cmd.layout);

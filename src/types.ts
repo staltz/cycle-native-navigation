@@ -51,7 +51,7 @@ export type ShowModalCommand = {
 };
 
 export type SetRootCommand = {
-  type: "setRoot";
+  type: 'setRoot';
   layout: LayoutRoot;
 };
 

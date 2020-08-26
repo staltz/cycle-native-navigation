@@ -28,7 +28,7 @@ export class NavSource {
   }
 
   public topBarButtonPress(buttonId?: string) {
-    if (buttonId) return this._topBar.filter(id => id === buttonId);
+    if (buttonId) return this._topBar.filter((id) => id === buttonId);
     else return this._topBar;
   }
 
@@ -47,7 +47,7 @@ export class NavSource {
   public globalDidDisappear(componentName?: string): Stream<DisappearEvent> {
     if (componentName) {
       return this._globalDidDisappear.filter(
-        ev => ev.componentName === componentName,
+        (ev) => ev.componentName === componentName,
       );
     } else {
       return this._globalDidDisappear;
