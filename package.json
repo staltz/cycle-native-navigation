@@ -1,6 +1,6 @@
 {
   "name": "cycle-native-navigation",
-  "version": "7.7.0",
+  "version": "7.8.0",
   "description": "Cycle.js drivers for react-native-navigation",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
