@@ -1,5 +1,9 @@
-import xs, {Stream, Listener} from 'xstream';
-import {Navigation} from 'react-native-navigation';
+import xs, {Stream, Listener, Producer} from 'xstream';
+import {
+  Navigation,
+  ComponentDidAppearEvent,
+  ComponentDidDisappearEvent,
+} from 'react-native-navigation';
 
 export type DisappearEvent = {componentId: string; componentName: string};
 
@@ -8,20 +12,27 @@ export class NavSource {
   public _back: Stream<null>;
   public _didAppear: Stream<null>;
   public _didDisappear: Stream<null>;
-  public _globalDidDisappear: Stream<DisappearEvent>;
+  public _globalDidAppear: Stream<ComponentDidAppearEvent>;
+  public _globalDidDisappear: Stream<ComponentDidDisappearEvent>;
 
   constructor() {
     this._topBar = xs.create<string>();
     this._back = xs.create<null>();
     this._didAppear = xs.create<null>();
     this._didDisappear = xs.create<null>();
-    this._globalDidDisappear = xs.create<DisappearEvent>({
-      start(listener: Listener<DisappearEvent>) {
-        Navigation.events().registerComponentDidDisappearListener(
-          (event: any) => {
-            listener.next(event);
-          },
-        );
+    this._globalDidAppear = xs.create<ComponentDidAppearEvent>({
+      start(listener: Listener<ComponentDidAppearEvent>) {
+        Navigation.events().registerComponentDidAppearListener((event) => {
+          listener.next(event);
+        });
+      },
+      stop() {},
+    });
+    this._globalDidDisappear = xs.create<ComponentDidDisappearEvent>({
+      start(listener: Listener<ComponentDidDisappearEvent>) {
+        Navigation.events().registerComponentDidDisappearListener((event) => {
+          listener.next(event);
+        });
       },
       stop() {},
     });
@@ -44,7 +55,21 @@ export class NavSource {
     return this._didDisappear;
   }
 
-  public globalDidDisappear(componentName?: string): Stream<DisappearEvent> {
+  public globalDidAppear(
+    componentName?: string,
+  ): Stream<ComponentDidAppearEvent> {
+    if (componentName) {
+      return this._globalDidAppear.filter(
+        (ev) => ev.componentName === componentName,
+      );
+    } else {
+      return this._globalDidAppear;
+    }
+  }
+
+  public globalDidDisappear(
+    componentName?: string,
+  ): Stream<ComponentDidDisappearEvent> {
     if (componentName) {
       return this._globalDidDisappear.filter(
         (ev) => ev.componentName === componentName,
