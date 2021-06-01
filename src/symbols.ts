@@ -1,1 +1,1 @@
-export const GlobalScreen = Symbol('global component without a screen');
+export const GlobalScreen = Symbol.for('global component without a screen');
