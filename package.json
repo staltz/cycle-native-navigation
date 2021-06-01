@@ -27,6 +27,6 @@
     "react": "16.8.x",
     "react-native": ">=0.60.0",
     "react-native-navigation": "4.0.x",
-    "typescript": "3.7.x"
+    "typescript": "4.2.x"
   }
 }
