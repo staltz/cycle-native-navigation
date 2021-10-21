@@ -5,67 +5,67 @@ import {Layout, Options, LayoutRoot} from 'react-native-navigation';
 import {GlobalScreen} from './symbols';
 import {NavSource} from './NavSource';
 
-export type PushCommand = {
+export interface PushCommand {
   type: 'push';
   id?: string;
   layout: Layout;
 };
 
-export type PopCommand = {
+export interface PopCommand {
   type: 'pop';
   id?: string;
   options: Options;
 };
 
-export type PopToCommand = {
+export interface PopToCommand {
   type: 'popTo';
   id?: string;
 };
 
-export type PopToRootCommand = {
+export interface PopToRootCommand {
   type: 'popToRoot';
   id?: string;
 };
 
-export type SetStackRootCommand = {
+export interface SetStackRootCommand {
   type: 'setStackRoot';
   id?: string;
   layout: Layout;
 };
 
-export type ShowOverlayCommand = {
+export interface ShowOverlayCommand {
   type: 'showOverlay';
   id?: string;
   layout: Layout;
 };
 
-export type DismissOverlayCommand = {
+export interface DismissOverlayCommand {
   type: 'dismissOverlay';
   id?: string;
 };
 
-export type ShowModalCommand = {
+export interface ShowModalCommand {
   type: 'showModal';
   id?: string;
   layout: Layout;
 };
 
-export type SetRootCommand = {
+export interface SetRootCommand {
   type: 'setRoot';
   layout: LayoutRoot;
 };
 
-export type DismissModalCommand = {
+export interface DismissModalCommand {
   type: 'dismissModal';
   id?: string;
 };
 
-export type DismissAllModalsCommand = {
+export interface DismissAllModalsCommand {
   type: 'dismissAllModals';
   id?: string;
 };
 
-export type MergeOptionsCommand = {
+export interface MergeOptionsCommand {
   type: 'mergeOptions';
   id?: string;
   opts: Options;
@@ -85,18 +85,18 @@ export type Command =
   | DismissAllModalsCommand
   | MergeOptionsCommand;
 
-export type MoreScreenSources = {
+export interface MoreScreenSources {
   screen: ReactSource;
   navigation: NavSource;
 };
 
-export type MoreScreenSinks = {
+export interface MoreScreenSinks {
   navigation?: Stream<Command>;
   screen?: Stream<ReactElement<any>>;
   navOptions?: Stream<any>;
 };
 
-export type Screens = {
+export interface Screens {
   [screenId: string]: (so: any) => any;
   [GlobalScreen]?: (so: any) => any;
 };
