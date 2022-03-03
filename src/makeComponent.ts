@@ -26,7 +26,7 @@ function neverComplete(stream: Stream<any>): Stream<any> {
 
 export default function makeComponent<
   D extends Drivers,
-  M extends MatchingMain<D, M>
+  M extends MatchingMain<D, M>,
 >(
   main: MatchingMain<D, M>, // (so: So & MoreSources) => Si & MoreSinks,
   engine: Engine<D>,
@@ -73,25 +73,44 @@ export default function makeComponent<
                 return;
               }
               const id = cmd.id ?? thisId;
-              if (cmd.type === 'push') Navigation.push(id, cmd.layout);
-              if (cmd.type === 'pop') Navigation.pop(id, cmd.options);
-              if (cmd.type === 'popTo') Navigation.popTo(id);
-              if (cmd.type === 'popToRoot') Navigation.popToRoot(id);
-              if (cmd.type === 'showModal') Navigation.showModal(cmd.layout);
-              if (cmd.type === 'dismissModal') Navigation.dismissModal(id);
-              if (cmd.type === 'dismissAllModals')
-                Navigation.dismissAllModals();
-              if (cmd.type === 'setStackRoot') {
-                Navigation.setStackRoot(id, cmd.layout);
-              }
-              if (cmd.type === 'showOverlay') {
-                Navigation.showOverlay(cmd.layout);
-              }
-              if (cmd.type === 'dismissOverlay') {
-                Navigation.dismissOverlay(id);
-              }
-              if (cmd.type === 'mergeOptions') {
-                Navigation.mergeOptions(id, {...this.latestOpts, ...cmd.opts});
+
+              switch (cmd.type) {
+                case 'push':
+                  Navigation.push(id, cmd.layout);
+                  break;
+                case 'pop':
+                  Navigation.pop(id, cmd.options);
+                  break;
+                case 'popTo':
+                  Navigation.popTo(id);
+                  break;
+                case 'popToRoot':
+                  Navigation.popToRoot(id);
+                  break;
+                case 'showModal':
+                  Navigation.showModal(cmd.layout);
+                  break;
+                case 'dismissModal':
+                  Navigation.dismissModal(id);
+                  break;
+                case 'dismissAllModals':
+                  Navigation.dismissAllModals();
+                  break;
+                case 'setStackRoot':
+                  Navigation.setStackRoot(id, cmd.layout);
+                  break;
+                case 'showOverlay':
+                  Navigation.showOverlay(cmd.layout);
+                  break;
+                case 'dismissOverlay':
+                  Navigation.dismissOverlay(id);
+                  break;
+                case 'mergeOptions':
+                  Navigation.mergeOptions(id, {
+                    ...this.latestOpts,
+                    ...cmd.opts,
+                  });
+                  break;
               }
             },
           });
