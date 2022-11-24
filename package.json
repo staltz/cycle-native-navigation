@@ -17,6 +17,7 @@
   "dependencies": {
     "@cycle/react": "2.x",
     "@cycle/run": "5.x",
+    "clarify-error": "^1.0.0",
     "xstream": "11.x"
   },
   "peerDependencies": {

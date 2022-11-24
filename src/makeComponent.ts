@@ -6,6 +6,7 @@ import {Engine, MatchingMain, Drivers, Sources} from '@cycle/run';
 import {ScopeContext, ReactSource, StreamRenderer} from '@cycle/react';
 import {Command, MoreScreenSources, MoreScreenSinks} from './types';
 import {NavSource} from './NavSource';
+import clarify = require('clarify-error');
 
 export type Props = {
   componentId: string;
@@ -68,49 +69,58 @@ export default function makeComponent<
         if (sinks.navigation) {
           this.commandSub = sinks.navigation.subscribe({
             next: (cmd: Command) => {
-              if (cmd.type === 'setRoot') {
-                Navigation.setRoot(cmd.layout);
-                return;
-              }
-              const id = cmd.id ?? thisId;
+              try {
+                if (cmd.type === 'setRoot') {
+                  Navigation.setRoot(cmd.layout);
+                  return;
+                }
+                const id = cmd.id ?? thisId;
 
-              switch (cmd.type) {
-                case 'push':
-                  Navigation.push(id, cmd.layout);
-                  break;
-                case 'pop':
-                  Navigation.pop(id, cmd.options);
-                  break;
-                case 'popTo':
-                  Navigation.popTo(id);
-                  break;
-                case 'popToRoot':
-                  Navigation.popToRoot(id);
-                  break;
-                case 'showModal':
-                  Navigation.showModal(cmd.layout);
-                  break;
-                case 'dismissModal':
-                  Navigation.dismissModal(id);
-                  break;
-                case 'dismissAllModals':
-                  Navigation.dismissAllModals();
-                  break;
-                case 'setStackRoot':
-                  Navigation.setStackRoot(id, cmd.layout);
-                  break;
-                case 'showOverlay':
-                  Navigation.showOverlay(cmd.layout);
-                  break;
-                case 'dismissOverlay':
-                  Navigation.dismissOverlay(id);
-                  break;
-                case 'mergeOptions':
-                  Navigation.mergeOptions(id, {
-                    ...this.latestOpts,
-                    ...cmd.opts,
-                  });
-                  break;
+                switch (cmd.type) {
+                  case 'push':
+                    Navigation.push(id, cmd.layout);
+                    break;
+                  case 'pop':
+                    Navigation.pop(id, cmd.options);
+                    break;
+                  case 'popTo':
+                    Navigation.popTo(id);
+                    break;
+                  case 'popToRoot':
+                    Navigation.popToRoot(id);
+                    break;
+                  case 'showModal':
+                    Navigation.showModal(cmd.layout);
+                    break;
+                  case 'dismissModal':
+                    Navigation.dismissModal(id);
+                    break;
+                  case 'dismissAllModals':
+                    Navigation.dismissAllModals();
+                    break;
+                  case 'setStackRoot':
+                    Navigation.setStackRoot(id, cmd.layout);
+                    break;
+                  case 'showOverlay':
+                    Navigation.showOverlay(cmd.layout);
+                    break;
+                  case 'dismissOverlay':
+                    Navigation.dismissOverlay(id);
+                    break;
+                  case 'mergeOptions':
+                    Navigation.mergeOptions(id, {
+                      ...this.latestOpts,
+                      ...cmd.opts,
+                    });
+                    break;
+                }
+              } catch (err: any) {
+                console.error(
+                  clarify(
+                    err,
+                    `cycle-native-navigation sink command "${cmd.type}" failed`,
+                  ),
+                );
               }
             },
           });
@@ -119,8 +129,17 @@ export default function makeComponent<
         if (sinks.navOptions) {
           this.navOptionsSub = sinks.navOptions.subscribe({
             next: (opts: any) => {
-              this.latestOpts = {...this.latestOpts, ...opts};
-              Navigation.mergeOptions(thisId, this.latestOpts);
+              try {
+                this.latestOpts = {...this.latestOpts, ...opts};
+                Navigation.mergeOptions(thisId, this.latestOpts);
+              } catch (err: any) {
+                console.error(
+                  clarify(
+                    err,
+                    `cycle-native-navigation sink "navOptions" failed`,
+                  ),
+                );
+              }
             },
           });
         }
