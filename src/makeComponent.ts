@@ -42,6 +42,7 @@ export default function makeComponent<
       private navEventsSub: NavSubscription;
       private backHandler: () => void;
       private latestOpts: any;
+      private popped: boolean;
 
       constructor(props: any) {
         super(props);
@@ -49,6 +50,7 @@ export default function makeComponent<
         this.backHandler = this.onBackPressed.bind(this);
         this.latestOpts = {};
         this.navEventsSub = Navigation.events().bindComponent(this);
+        this.popped = false;
       }
 
       public componentDidMount() {
@@ -81,7 +83,17 @@ export default function makeComponent<
                     Navigation.push(id, cmd.layout);
                     break;
                   case 'pop':
-                    Navigation.pop(id, cmd.options);
+                    // Quick hack to fix a backpressure problem.
+                    //
+                    // The sinks.navigation may emit duplicate pops (because the
+                    // user double taps) while the Navigation.pop is still in
+                    // progress (it's async, returns a Promise). Ideally we
+                    // would have a pull system that waits for these commands to
+                    // finish before handling the next command.
+                    if (!this.popped) {
+                      this.popped = true;
+                      Navigation.pop(id, cmd.options);
+                    }
                     break;
                   case 'popTo':
                     Navigation.popTo(id);
